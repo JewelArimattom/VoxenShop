@@ -1,36 +1,157 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+﻿# VoxenShop — Mini E‑Commerce Demo (Next.js + TypeScript)
 
-## Getting Started
+A small demo marketplace built with Next.js App Router, TypeScript and Tailwind CSS. It includes a Home page, Product listing, Product details, Cart, Checkout, Login (client-side), and Orders — all wired together with React Context for state and localStorage persistence for demo purposes.
 
-First, run the development server:
+This README documents how to run the project locally, the main architecture, where data is stored today, and how to deploy to Vercel.
 
-```bash
+---
+
+## Quick Start
+
+Prerequisites:
+- Node.js (16+ recommended) — check with `node -v`.
+- npm (comes with Node) or an alternative package manager.
+
+Install dependencies and run the dev server:
+
+```powershell
+cd C:\My\Voxen\ecommerce-app
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Build for production:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```powershell
+npm run build
+npm run start
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Project Structure (high level)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `app/` — Next.js App Router pages and layouts. Key pages:
+  - `app/page.tsx` — Home
+  - `app/products/page.tsx` — Products listing
+  - `app/checkout/page.tsx` — Checkout flow
+  - `app/login` — Login / register UI
+  - `app/api/*` — mock API routes for products
+- `components/` — Reusable UI components (`ProductCard`, `HeroCarousel`, `Navbar`, etc.)
+- `context/` — React Context providers for app state:
+  - `AuthContext.tsx` — client-side auth (localStorage)
+  - `CartContext.tsx` — cart persistence and helpers
+  - `OrderContext.tsx` — order creation/storage
+- `data/products.ts` — mock product data used by API routes and pages
+- `public/`, `styles/`, `next.config.js`, `package.json` — standard Next.js files
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Features
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Product listing with search, categories, price filtering, and sorting
+- Sale banners and featured carousel on Home
+- Product details page
+- Cart with quantity updates and persistence
+- Checkout flow with client-side validation and order creation
+- Login/register stored in `localStorage` (demo only)
+- Orders list persisted to `localStorage`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Where user and app data is currently saved
+
+This demo stores users, cart items and orders in the browser `localStorage` (no backend):
+
+- `AuthContext` reads/writes a `users` array and `currentUser` session key (look in `src/context/AuthContext.tsx`).
+- `CartContext` persists cart state to a `cart` key in `localStorage`.
+- `OrderContext` persists orders to an `orders` key.
+
+These are intentionally simple for a demo. See the sections below for how to move to a server-backed approach.
+
+---
+
+## Validation & UX
+
+- Checkout includes client-side validation for shipping and payment fields and shows inline error messages.
+- ProductCard and other interactive components are implemented as client components when needed.
+
+---
+
+## Environment variables
+
+This project does not require runtime environment variables for the demo. If you add API keys or services, add them to Vercel or a `.env.local` file (do not commit secrets):
+
+```
+NEXT_PUBLIC_API_URL=...
+API_SECRET=...
+```
+
+Use `NEXT_PUBLIC_` prefix for values that must be available in browser code.
+
+---
+
+## Deploying to Vercel (recommended)
+
+1. Push your repo to GitHub/GitLab/Bitbucket.
+2. Sign in to https://vercel.com and click **New Project  Import Git Repository**.
+3. Vercel will detect `Next.js` automatically. Use `npm run build` as the build command if asked.
+4. Add any environment variables under Project Settings (if you introduce any).
+5. Deploy — Vercel will create preview deployments for branches and production deployments for `main`.
+
+Or deploy from your machine using the Vercel CLI:
+
+```powershell
+npm i -g vercel
+vercel login
+cd C:\My\Voxen\ecommerce-app
+vercel --prod
+```
+
+Notes:
+- If your app fetches external images, ensure `next.config.js` `images.remotePatterns` includes the domains.
+- For App Router projects, Vercel supports the setup out-of-the-box.
+
+---
+
+## Moving from localStorage to a server (recommended for production)
+
+High-level steps:
+
+1. Add API endpoints (serverless functions or a small API server) for auth and orders.
+2. Replace `AuthContext.register/login` to POST to `/api/auth/register` and `/api/auth/login`.
+3. Use secure cookies (httpOnly) or JWTs for authentication — do not store secrets in `localStorage`.
+4. Replace `OrderContext.addOrder` to POST orders to the server (which stores them in a DB).
+5. Keep client-side caching as an optional performance layer.
+
+Suggested backend options: Supabase, Firebase, PlanetScale (MySQL), or a small Express/Next server with PostgreSQL.
+
+---
+
+## Development notes & troubleshooting
+
+- If images fail to load in production, add the host to `next.config.js` `images.remotePatterns` and redeploy.
+- If build fails on Vercel, check build logs for missing env vars, Node version mismatches, or TypeScript errors.
+- Use `npm run build` locally to reproduce production build issues before deploying.
+
+---
+
+## Contributing
+
+This repo is a demo scaffold. If you want features or improvements, open a PR or ask me to implement them — e.g., server-backed auth, Luhn card validation, or improved responsiveness.
+
+---
+
+## License
+
+This project is provided as a demo — add your preferred license if you plan to redistribute.
+
+---
+
+If you'd like, I can:
+- Add serverless API endpoints (orders/auth) that persist to a simple JSON file (demo),
+- Or scaffold an integration with Supabase for persistent users and orders.
+
+Tell me which option you prefer and I'll implement it.
