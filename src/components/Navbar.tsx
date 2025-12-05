@@ -32,7 +32,7 @@ export default function Navbar() {
               Home
             </Link>
             <Link
-              href="/#products"
+              href="/products"
               className="text-gray-600 hover:text-blue-600 font-medium transition-colors duration-200"
             >
               Products
@@ -184,7 +184,7 @@ export default function Navbar() {
                 Home
               </Link>
               <Link
-                href="/#products"
+                href="/products"
                 className="text-gray-600 hover:text-blue-600 font-medium py-2 transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >

@@ -1,115 +1,164 @@
-"use client";
-
-import { useMemo, useState } from "react";
 import ProductCard from "@/components/ProductCard";
+import HeroCarousel from "@/components/HeroCarousel";
 import { products } from "@/data/products";
 
 export default function Home() {
-  const [query, setQuery] = useState("");
-  const [activeCategory, setActiveCategory] = useState("All");
-
-  const categories = useMemo(() => {
-    const setCat = new Set<string>();
-    products.forEach((p) => setCat.add(p.category));
-    return ["All", ...Array.from(setCat)];
-  }, []);
-
-  const filtered = useMemo(() => {
-    return products.filter((p) => {
-      const matchesQuery = p.name.toLowerCase().includes(query.toLowerCase()) || p.description.toLowerCase().includes(query.toLowerCase());
-      const matchesCategory = activeCategory === "All" ? true : p.category === activeCategory;
-      return matchesQuery && matchesCategory;
-    });
-  }, [query, activeCategory]);
-
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {/* Top search area similar to marketplace */}
-      <div className="bg-white border-b">
+    <div className="bg-gradient-to-b from-blue-50 to-white">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+          <div className="text-center">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              Welcome to{' '}
+              <span className="text-blue-600">Voxen</span>
+              <span className="text-orange-500">Shop</span>
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
+              Discover amazing products at unbeatable prices. Quality you can trust, 
+              service you deserve.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="#products"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 inline-flex items-center justify-center"
+              >
+                Shop Now
+                <svg
+                  className="ml-2 w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                  />
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="bg-white hover:bg-gray-50 text-blue-600 font-semibold px-8 py-3 rounded-lg border-2 border-blue-600 transition-colors duration-200 inline-flex items-center justify-center"
+              >
+                Learn More
+              </a>
+            </div>
+          </div>
+        </div>
+        
+        {/* Decorative Elements */}
+        <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
+        <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-orange-200 rounded-full opacity-20 blur-3xl"></div>
+      </section>
+
+      {/* Hero banners removed per request - kept hero intro only */}
+
+      {/* Features Section */}
+      <section className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 py-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-700 rounded flex items-center justify-center">
-                <span className="text-white font-bold">V</span>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex items-center space-x-4 p-6 bg-blue-50 rounded-xl">
+              <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                </svg>
               </div>
-              <div className="hidden sm:block">
-                <p className="text-sm text-gray-600">Delivering to</p>
-                <p className="text-sm font-semibold text-gray-900">Your Location</p>
-              </div>
-            </div>
-
-            <div className="flex-1">
-              <div className="relative">
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search for products, brands and more"
-                  className="w-full rounded-md border border-gray-200 px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button className="absolute right-1 top-1/2 -translate-y-1/2 bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-md">
-                  Search
-                </button>
+              <div>
+                <h3 className="font-semibold text-gray-900">Quality Products</h3>
+                <p className="text-sm text-gray-600">Handpicked for excellence</p>
               </div>
             </div>
-
-            <div className="hidden md:flex items-center gap-4">
-              <button className="text-sm px-3 py-2">Sign in</button>
-              <button className="text-sm px-3 py-2">Cart</button>
+            <div className="flex items-center space-x-4 p-6 bg-orange-50 rounded-xl">
+              <div className="flex-shrink-0 w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Fast Delivery</h3>
+                <p className="text-sm text-gray-600">Quick and reliable shipping</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4 p-6 bg-blue-50 rounded-xl">
+              <div className="flex-shrink-0 w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Secure Shopping</h3>
+                <p className="text-sm text-gray-600">100% secure payments</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Promo banner */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg p-6 text-white flex flex-col md:flex-row items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold">Big Savings on Top Brands</h2>
-            <p className="mt-1 text-sm">Up to 50% off. Limited time offer.</p>
+      {/* Products Section */}
+      <section id="products" className="py-16 bg-gradient-to-b from-white to-blue-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              Featured Products
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Explore our curated collection of premium products designed to enhance your lifestyle.
+            </p>
           </div>
-          <div className="mt-4 md:mt-0">
-            <button className="bg-white text-blue-600 px-4 py-2 rounded-md font-medium">Shop Deals</button>
+
+          {/* Featured carousel banner (auto horizontal scroll) */}
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+            <div>
+              <HeroCarousel
+                slides={[
+                  { id: 'hb1', title: 'Up to 40% off From Rs 2,990', subtitle: 'Smartphones, Tablets and more', image: 'https://images.unsplash.com/photo-1542345307-d87fd97e0ed5?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' },
+                  { id: 'hb2', title: 'Up to 50% off Electronics', subtitle: 'Speakers, Headphones and more', image: 'https://images.unsplash.com/photo-1621935054884-471b227e3bd6?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8U3BlYWtlcnMlMkMlMjBIZWFkcGhvbmVzJTIwYW5kJTIwbW9yZXxlbnwwfHwwfHx8MA%3D%3D' },
+                  { id: 'hb3', title: 'Winter Fashion Deals', subtitle: 'Coats & Jackets starting Rs 999', image: 'https://images.unsplash.com/photo-1604644401890-0bd678c83788?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8Q29hdHMlMjAlMjYlMjBKYWNrZXRzfGVufDB8fDB8fHww' }
+                ]}
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Main content: sidebar + products */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <aside className="hidden lg:block">
-            <div className="bg-white rounded-lg shadow p-4">
-              <h3 className="text-sm font-semibold mb-3">Shop by Category</h3>
-              <ul className="space-y-2 text-sm">
-                {categories.map((c) => (
-                  <li key={c}>
-                    <button
-                      onClick={() => setActiveCategory(c)}
-                      className={`w-full text-left py-2 px-3 rounded ${activeCategory === c ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                    >
-                      {c}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </aside>
-
-          {/* Products grid */}
-          <section className="lg:col-span-3">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-xl font-semibold">Showing {filtered.length} results</h3>
-              <div className="text-sm text-gray-600">Sort: <select className="ml-2 border-gray-200 rounded px-2 py-1"><option>Relevance</option><option>Price: Low to High</option><option>Price: High to Low</option></select></div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filtered.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-          </section>
+      {/* CTA Section */}
+      <section className="py-16 bg-blue-600">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
+            Ready to Start Shopping?
+          </h2>
+          <p className="text-blue-100 mb-8 max-w-2xl mx-auto">
+            Join thousands of satisfied customers who trust VoxenShop for their everyday needs.
+          </p>
+          <a
+            href="#products"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 inline-flex items-center"
+          >
+            Browse All Products
+            <svg
+              className="ml-2 w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
+          </a>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

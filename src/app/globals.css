@@ -47,3 +47,21 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
+/* Marquee animation for horizontal banners */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee {
+  display: flex;
+  gap: 1rem;
+  will-change: transform;
+  animation: marquee 18s linear infinite;
+}
+
+/* Pause marquee on hover */
+.marquee:hover {
+  animation-play-state: paused;
+}
