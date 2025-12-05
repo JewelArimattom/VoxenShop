@@ -27,6 +27,7 @@ export default function CheckoutPage() {
   });
   const [loading, setLoading] = useState(false);
   const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Redirect if cart is empty
   if (items.length === 0) {
@@ -54,6 +55,62 @@ export default function CheckoutPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    // Clear specific field error when user edits
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validateEmail = (email: string) => {
+    return /^\S+@\S+\.\S+$/.test(email);
+  };
+
+  const validateShipping = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.fullName.trim()) newErrors.fullName = "Full name is required.";
+    if (!formData.email.trim()) newErrors.email = "Email is required.";
+    else if (!validateEmail(formData.email)) newErrors.email = "Enter a valid email address.";
+    if (!formData.address.trim()) newErrors.address = "Street address is required.";
+    if (!formData.city.trim()) newErrors.city = "City is required.";
+    if (!formData.postalCode.trim()) newErrors.postalCode = "Postal code is required.";
+    else if (!/^[A-Za-z0-9\-\s]{3,10}$/.test(formData.postalCode)) newErrors.postalCode = "Enter a valid postal code.";
+    if (!formData.country) newErrors.country = "Please select a country.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateCardNumber = (num: string) => {
+    const digits = num.replace(/\s+/g, "").replace(/[^0-9]/g, "");
+    return digits.length >= 13 && digits.length <= 19 && /^[0-9]+$/.test(digits);
+  };
+
+  const validateExpiry = (exp: string) => {
+    if (!/^\d{2}\/\d{2}$/.test(exp)) return false;
+    const [mm, yy] = exp.split('/').map((s) => parseInt(s, 10));
+    if (mm < 1 || mm > 12) return false;
+    const now = new Date();
+    const year = 2000 + yy;
+    const expDate = new Date(year, mm);
+    return expDate > now;
+  };
+
+  const validatePayment = () => {
+    const newErrors: Record<string, string> = {};
+    if (!formData.cardNumber.trim()) newErrors.cardNumber = "Card number is required.";
+    else if (!validateCardNumber(formData.cardNumber)) newErrors.cardNumber = "Enter a valid card number.";
+    if (!formData.cardExpiry.trim()) newErrors.cardExpiry = "Expiry date is required.";
+    else if (!validateExpiry(formData.cardExpiry)) newErrors.cardExpiry = "Enter a valid expiry (MM/YY) that is not expired.";
+    if (!formData.cardCvc.trim()) newErrors.cardCvc = "CVC is required.";
+    else if (!/^\d{3,4}$/.test(formData.cardCvc)) newErrors.cardCvc = "Enter a valid 3 or 4 digit CVC.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleContinue = () => {
+    if (validateShipping()) {
+      setStep(2);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -61,6 +118,12 @@ export default function CheckoutPage() {
     
     if (!isAuthenticated) {
       router.push("/login");
+      return;
+    }
+
+    // Validate payment before submitting
+    if (!validatePayment()) {
+      setStep(2);
       return;
     }
 
@@ -143,6 +206,13 @@ export default function CheckoutPage() {
                   )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    { (errors.fullName || errors.email || errors.address || errors.city || errors.postalCode || errors.country) && (
+                      <div className="md:col-span-2">
+                        <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg p-3 mb-4">
+                          <strong className="font-semibold">Please fix the highlighted fields.</strong>
+                        </div>
+                      </div>
+                    ) }
                     <div className="md:col-span-2">
                       <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
                         Full Name
@@ -157,6 +227,7 @@ export default function CheckoutPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="John Doe"
                       />
+                      {errors.fullName && <p className="text-sm text-red-600 mt-2">{errors.fullName}</p>}
                     </div>
 
                     <div className="md:col-span-2">
@@ -173,6 +244,7 @@ export default function CheckoutPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="john@example.com"
                       />
+                      {errors.email && <p className="text-sm text-red-600 mt-2">{errors.email}</p>}
                     </div>
 
                     <div className="md:col-span-2">
@@ -189,6 +261,7 @@ export default function CheckoutPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="123 Main Street"
                       />
+                      {errors.address && <p className="text-sm text-red-600 mt-2">{errors.address}</p>}
                     </div>
 
                     <div>
@@ -205,6 +278,7 @@ export default function CheckoutPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="New York"
                       />
+                      {errors.city && <p className="text-sm text-red-600 mt-2">{errors.city}</p>}
                     </div>
 
                     <div>
@@ -221,6 +295,7 @@ export default function CheckoutPage() {
                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="10001"
                       />
+                      {errors.postalCode && <p className="text-sm text-red-600 mt-2">{errors.postalCode}</p>}
                     </div>
 
                     <div className="md:col-span-2">
@@ -242,12 +317,13 @@ export default function CheckoutPage() {
                         <option value="IN">India</option>
                         <option value="AU">Australia</option>
                       </select>
+                      {errors.country && <p className="text-sm text-red-600 mt-2">{errors.country}</p>}
                     </div>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => setStep(2)}
+                    onClick={handleContinue}
                     className="w-full mt-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200"
                   >
                     Continue to Payment
@@ -257,6 +333,13 @@ export default function CheckoutPage() {
 
               {step === 2 && (
                 <div className="bg-white rounded-xl shadow-md p-6">
+                  {(errors.cardNumber || errors.cardExpiry || errors.cardCvc) && (
+                    <div className="mb-4">
+                      <div className="bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-lg p-3">
+                        <strong className="font-semibold">Please fix the highlighted payment fields.</strong>
+                      </div>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-gray-900">Payment Information</h2>
                     <button
@@ -284,6 +367,7 @@ export default function CheckoutPage() {
                         placeholder="1234 5678 9012 3456"
                         maxLength={19}
                       />
+                      {errors.cardNumber && <p className="text-sm text-red-600 mt-2">{errors.cardNumber}</p>}
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
@@ -302,6 +386,7 @@ export default function CheckoutPage() {
                           placeholder="MM/YY"
                           maxLength={5}
                         />
+                        {errors.cardExpiry && <p className="text-sm text-red-600 mt-2">{errors.cardExpiry}</p>}
                       </div>
                       <div>
                         <label htmlFor="cardCvc" className="block text-sm font-medium text-gray-700 mb-1">
@@ -318,6 +403,7 @@ export default function CheckoutPage() {
                           placeholder="123"
                           maxLength={4}
                         />
+                        {errors.cardCvc && <p className="text-sm text-red-600 mt-2">{errors.cardCvc}</p>}
                       </div>
                     </div>
                   </div>

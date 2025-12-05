@@ -21,9 +21,9 @@ export const products: Product[] = [
   {
     id: 2,
     name: "Smart Fitness Watch",
-    price: 199.99,
+    price: 19,
     sale: true,
-    salePrice: 149.99,
+    salePrice: 14.99,
     description: "Track your health and fitness goals with this advanced smartwatch. Features heart rate monitoring, GPS tracking, sleep analysis, and 50+ workout modes. Water-resistant up to 50 meters with a bright AMOLED display that's visible even in direct sunlight.",
     image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&q=80",
     category: "Electronics"

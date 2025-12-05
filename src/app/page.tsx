@@ -1,6 +1,7 @@
 import ProductCard from "@/components/ProductCard";
 import HeroCarousel from "@/components/HeroCarousel";
 import { products } from "@/data/products";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -19,9 +20,9 @@ export default function Home() {
               service you deserve.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="#products"
-                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 inline-flex items-center justify-center"
+              <Link
+                href="/products"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 inline-flex items-center justify-center cta-animate"
               >
                 Shop Now
                 <svg
@@ -37,20 +38,32 @@ export default function Home() {
                     d="M17 8l4 4m0 0l-4 4m4-4H3"
                   />
                 </svg>
-              </a>
-              <a
-                href="#"
-                className="bg-white hover:bg-gray-50 text-blue-600 font-semibold px-8 py-3 rounded-lg border-2 border-blue-600 transition-colors duration-200 inline-flex items-center justify-center"
-              >
-                Learn More
-              </a>
+              </Link>
             </div>
           </div>
         </div>
         
-        {/* Decorative Elements */}
-        <div className="absolute top-0 left-0 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-200 rounded-full opacity-20 blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-orange-200 rounded-full opacity-20 blur-3xl"></div>
+        {/* Decorative Elements with subtle animation */}
+        <div className="absolute top-10 left-8">
+          <div className="w-28 h-28 bg-blue-200/80 rounded-full blur-2xl floaty delay-200" />
+        </div>
+        <div className="absolute top-6 right-10">
+          <div className="w-20 h-20 bg-orange-200/90 rounded-full blur-md floaty delay-500 rotate-slow" />
+        </div>
+        <div className="absolute bottom-12 left-20">
+          <div className="w-16 h-16 bg-indigo-200/80 rounded-full shadow-lg floaty delay-800" />
+        </div>
+        <div className="absolute inset-0 pointer-events-none">
+          <svg className="absolute left-1/2 -translate-x-1/2 top-6 w-48 opacity-10" viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="g" x1="0" x2="1">
+                <stop offset="0" stopColor="#ffffff" stopOpacity="0.6" />
+                <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <rect width="200" height="30" fill="url(#g)"/>
+          </svg>
+        </div>
       </section>
 
       {/* Hero banners removed per request - kept hero intro only */}
@@ -121,7 +134,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -139,7 +152,7 @@ export default function Home() {
             Join thousands of satisfied customers who trust VoxenShop for their everyday needs.
           </p>
           <a
-            href="#products"
+            href="/products"
             className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 inline-flex items-center"
           >
             Browse All Products

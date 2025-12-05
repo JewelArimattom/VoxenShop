@@ -52,6 +52,8 @@ export default function ProductsPage() {
     return copy; // Relevance (default)
   }, [filtered, sortOption]);
 
+  const visibleProducts = saleFilter ? sorted.filter((p) => p.sale) : sorted;
+
   useEffect(() => {
     const saleParam = searchParams?.get?.("sale");
     if (saleParam === "true") {
@@ -181,11 +183,47 @@ export default function ProductsPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {(saleFilter ? sorted.filter(p => p.sale) : sorted).map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
+            {visibleProducts.length === 0 ? (
+              <div className="p-12 bg-white rounded-lg shadow-md flex flex-col items-center justify-center">
+                <svg className="w-16 h-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h18v4H3V3zM5 11h14v9H5v-9z" />
+                </svg>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">No products found</h3>
+                <p className="text-sm text-gray-600 text-center max-w-md mb-4">
+                  We couldn't find any products matching your filters{activeCategory && activeCategory !== 'All' ? ` in "${activeCategory}"` : ''}.
+                </p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => {
+                      setActiveCategory('All');
+                      setQuery('');
+                      setSaleFilter(false);
+                      setPriceMin(absoluteMinPrice);
+                      setPriceMax(absoluteMaxPrice);
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                  >
+                    Browse All Products
+                  </button>
+                  <button
+                    onClick={() => {
+                      setQuery('');
+                      setPriceMin(absoluteMinPrice);
+                      setPriceMax(absoluteMaxPrice);
+                    }}
+                    className="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-md"
+                  >
+                    Clear Filters
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {visibleProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
           </section>
         </div>
       </div>

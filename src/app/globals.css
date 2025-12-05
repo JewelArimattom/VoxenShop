@@ -65,3 +65,40 @@ body {
 .marquee:hover {
   animation-play-state: paused;
 }
+
+/* Hero animations */
+@keyframes floaty {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.95; }
+  50% { transform: translateY(-14px) translateX(6px) rotate(6deg); opacity: 1; }
+  100% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0.95; }
+}
+
+@keyframes slow-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-cta {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(249,115,22,0.45); }
+  70% { transform: scale(1.03); box-shadow: 0 12px 24px -8px rgba(0,0,0,0.18); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(249,115,22,0); }
+}
+
+.floaty { animation: floaty 6s ease-in-out infinite; }
+.floaty.delay-200 { animation-delay: 0.2s; }
+.floaty.delay-500 { animation-delay: 0.5s; }
+.floaty.delay-800 { animation-delay: 0.8s; }
+.rotate-slow { animation: slow-rotate 18s linear infinite; }
+.cta-animate { animation: pulse-cta 3s ease-in-out infinite; }
+.cta-animate:hover { animation-play-state: paused; transform: scale(1.04); }
+
+/* subtle shimmer for subtitle */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3.5s linear infinite;
+}
