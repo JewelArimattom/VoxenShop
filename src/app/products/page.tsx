@@ -10,6 +10,7 @@ export default function ProductsPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [sortOption, setSortOption] = useState("Relevance");
   const [saleFilter, setSaleFilter] = useState(false);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -98,70 +99,183 @@ export default function ProductsPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-          {/* Sidebar */}
-          <aside className="bg-white rounded-lg p-4">
-            <div className="mb-4">
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search products"
-                className="w-full border border-gray-200 rounded px-3 py-2 focus:outline-none"
-              />
-            </div>
-            <div className="mb-4">
-              <h3 className="text-sm font-semibold mb-2">Price Range</h3>
-              <div className="text-sm text-gray-600 mb-2">Rs {priceMin.toFixed(0)} — Rs {priceMax.toFixed(0)}</div>
-              <div className="relative">
-                <input
-                  type="range"
-                  min={absoluteMinPrice}
-                  max={absoluteMaxPrice}
-                  value={priceMin}
-                  onInput={(e) => {
-                    const val = Number((e.target as HTMLInputElement).value);
-                    // ensure priceMin < priceMax
-                    const next = Math.min(val, priceMax - 1);
-                    setPriceMin(next);
-                  }}
-                  className="w-full appearance-none h-2 bg-transparent absolute top-0 left-0"
-                />
-                <input
-                  type="range"
-                  min={absoluteMinPrice}
-                  max={absoluteMaxPrice}
-                  value={priceMax}
-                  onInput={(e) => {
-                    const val = Number((e.target as HTMLInputElement).value);
-                    const next = Math.max(val, priceMin + 1);
-                    setPriceMax(next);
-                  }}
-                  className="w-full appearance-none h-2 bg-transparent"
-                />
-                <div className="pointer-events-none h-2 rounded bg-gray-200 mt-3">
-                  <div
-                    className="h-2 bg-blue-500 rounded"
-                    style={{
-                      width: `${((priceMax - priceMin) / (absoluteMaxPrice - absoluteMinPrice)) * 100}%`,
-                      marginLeft: `${((priceMin - absoluteMinPrice) / (absoluteMaxPrice - absoluteMinPrice)) * 100}%`
-                    }}
-                  />
+          {/* Mobile filter button */}
+          <div className="lg:hidden mb-4 flex gap-2">
+            <button
+              onClick={() => setMobileFilterOpen(true)}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center justify-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+              </svg>
+              Filters
+            </button>
+          </div>
+
+          {/* Mobile filter modal/overlay */}
+          {mobileFilterOpen && (
+            <div className="lg:hidden fixed inset-0 z-50 bg-black bg-opacity-50">
+              <div className="fixed inset-y-0 left-0 w-4/5 max-w-sm bg-white shadow-xl overflow-y-auto">
+                <div className="p-4 border-b flex items-center justify-between sticky top-0 bg-white">
+                  <h2 className="text-lg font-bold">Filters</h2>
+                  <button
+                    onClick={() => setMobileFilterOpen(false)}
+                    className="text-gray-600 hover:text-gray-900 text-2xl"
+                  >
+                    ×
+                  </button>
+                </div>
+
+                <div className="p-4 space-y-6">
+                  {/* Search */}
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700 block mb-2">Search</label>
+                    <input
+                      value={query}
+                      onChange={(e) => setQuery(e.target.value)}
+                      placeholder="Search products"
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  {/* Price Range */}
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700 block mb-2">Price Range</label>
+                    <div className="text-sm text-gray-600 mb-3 bg-blue-50 p-2 rounded">Rs {priceMin.toFixed(0)} — Rs {priceMax.toFixed(0)}</div>
+                    <div className="relative space-y-2">
+                      <input
+                        type="range"
+                        min={absoluteMinPrice}
+                        max={absoluteMaxPrice}
+                        value={priceMin}
+                        onInput={(e) => {
+                          const val = Number((e.target as HTMLInputElement).value);
+                          const next = Math.min(val, priceMax - 1);
+                          setPriceMin(next);
+                        }}
+                        className="w-full appearance-none h-2 bg-transparent absolute top-0 left-0"
+                      />
+                      <input
+                        type="range"
+                        min={absoluteMinPrice}
+                        max={absoluteMaxPrice}
+                        value={priceMax}
+                        onInput={(e) => {
+                          const val = Number((e.target as HTMLInputElement).value);
+                          const next = Math.max(val, priceMin + 1);
+                          setPriceMax(next);
+                        }}
+                        className="w-full appearance-none h-2 bg-transparent"
+                      />
+                      <div className="pointer-events-none h-2 rounded bg-gray-200 mt-3">
+                        <div
+                          className="h-2 bg-blue-500 rounded"
+                          style={{
+                            width: `${((priceMax - priceMin) / (absoluteMaxPrice - absoluteMinPrice)) * 100}%`,
+                            marginLeft: `${((priceMin - absoluteMinPrice) / (absoluteMaxPrice - absoluteMinPrice)) * 100}%`
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Categories */}
+                  <div>
+                    <label className="text-sm font-semibold text-gray-700 block mb-3">Categories</label>
+                    <div className="space-y-2">
+                      {categories.map((c) => (
+                        <button
+                          key={c}
+                          onClick={() => setActiveCategory(c)}
+                          className={`w-full text-left py-2 px-3 rounded-lg transition ${
+                            activeCategory === c
+                              ? 'bg-blue-600 text-white font-medium'
+                              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          }`}
+                        >
+                          {c}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Close button */}
+                  <button
+                    onClick={() => setMobileFilterOpen(false)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-medium"
+                  >
+                    Apply Filters
+                  </button>
                 </div>
               </div>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold mb-2">Categories</h3>
-              <ul className="space-y-2">
-                {categories.map((c) => (
-                  <li key={c}>
-                    <button
-                      onClick={() => setActiveCategory(c)}
-                      className={`w-full text-left py-2 px-3 rounded ${activeCategory === c ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
-                    >
-                      {c}
-                    </button>
-                  </li>
-                ))}
-              </ul>
+          )}
+
+          {/* Desktop Sidebar */}
+          <aside className="hidden lg:block bg-white rounded-lg p-4 sticky top-24 h-fit">
+            <div className="space-y-4">
+              <div>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Search products"
+                  className="w-full border border-gray-200 rounded px-3 py-2 focus:outline-none"
+                />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold mb-2">Price Range</h3>
+                <div className="text-sm text-gray-600 mb-2">Rs {priceMin.toFixed(0)} — Rs {priceMax.toFixed(0)}</div>
+                <div className="relative">
+                  <input
+                    type="range"
+                    min={absoluteMinPrice}
+                    max={absoluteMaxPrice}
+                    value={priceMin}
+                    onInput={(e) => {
+                      const val = Number((e.target as HTMLInputElement).value);
+                      const next = Math.min(val, priceMax - 1);
+                      setPriceMin(next);
+                    }}
+                    className="w-full appearance-none h-2 bg-transparent absolute top-0 left-0"
+                  />
+                  <input
+                    type="range"
+                    min={absoluteMinPrice}
+                    max={absoluteMaxPrice}
+                    value={priceMax}
+                    onInput={(e) => {
+                      const val = Number((e.target as HTMLInputElement).value);
+                      const next = Math.max(val, priceMin + 1);
+                      setPriceMax(next);
+                    }}
+                    className="w-full appearance-none h-2 bg-transparent"
+                  />
+                  <div className="pointer-events-none h-2 rounded bg-gray-200 mt-3">
+                    <div
+                      className="h-2 bg-blue-500 rounded"
+                      style={{
+                        width: `${((priceMax - priceMin) / (absoluteMaxPrice - absoluteMinPrice)) * 100}%`,
+                        marginLeft: `${((priceMin - absoluteMinPrice) / (absoluteMaxPrice - absoluteMinPrice)) * 100}%`
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold mb-2">Categories</h3>
+                <ul className="space-y-2">
+                  {categories.map((c) => (
+                    <li key={c}>
+                      <button
+                        onClick={() => setActiveCategory(c)}
+                        className={`w-full text-left py-2 px-3 rounded ${activeCategory === c ? 'bg-blue-50 text-blue-600 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                      >
+                        {c}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </aside>
 

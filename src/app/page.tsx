@@ -8,65 +8,57 @@ export default function Home() {
     <div className="bg-gradient-to-b from-blue-50 to-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-          <div className="text-center">
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
-              Welcome to{' '}
-              <span className="text-blue-600">Voxen</span>
-              <span className="text-orange-500">Shop</span>
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-              Discover amazing products at unbeatable prices. Quality you can trust, 
-              service you deserve.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/products"
-                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg transition-colors duration-200 inline-flex items-center justify-center cta-animate"
-              >
-                Shop Now
-                <svg
-                  className="ml-2 w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-24">
+          <div className="text-center lg:text-left lg:flex lg:items-center lg:gap-12">
+            <div className="lg:flex-1">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 sm:mb-6">
+                Welcome to{' '}
+                <span className="text-blue-600">Voxen</span>
+                <span className="text-orange-500">Shop</span>
+              </h1>
+              <p className="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto lg:mx-0 mb-6 sm:mb-8">
+                Discover amazing products at unbeatable prices. Quality you can trust, 
+                service you deserve.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start">
+                <Link
+                  href="/products"
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 sm:px-8 py-3 rounded-full transition-colors duration-200 inline-flex items-center justify-center gap-2"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17 8l4 4m0 0l-4 4m4-4H3"
-                  />
-                </svg>
-              </Link>
+                  Shop Now
+                  <svg
+                    className="w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    />
+                  </svg>
+                </Link>
+              </div>
+            </div>
+
+            {/* Decorative product showcase for mobile */}
+            <div className="hidden lg:flex lg:flex-1 relative h-80 items-center justify-center">
+              <div className="absolute w-48 h-48 bg-yellow-300 rounded-lg shadow-lg" />
+              <div className="absolute right-12 bottom-10 w-40 h-40 bg-gray-300 rounded-lg shadow-lg" />
             </div>
           </div>
         </div>
         
         {/* Decorative Elements with subtle animation */}
-        <div className="absolute top-10 left-8">
-          <div className="w-28 h-28 bg-blue-200/80 rounded-full blur-2xl floaty delay-200" />
+        <div className="absolute top-8 left-4 sm:top-10 sm:left-8">
+          <div className="w-16 sm:w-28 h-16 sm:h-28 bg-blue-200/80 rounded-full blur-2xl floaty delay-200" />
         </div>
-        <div className="absolute top-6 right-10">
-          <div className="w-20 h-20 bg-orange-200/90 rounded-full blur-md floaty delay-500 rotate-slow" />
-        </div>
-        <div className="absolute bottom-12 left-20">
-          <div className="w-16 h-16 bg-indigo-200/80 rounded-full shadow-lg floaty delay-800" />
-        </div>
-        <div className="absolute inset-0 pointer-events-none">
-          <svg className="absolute left-1/2 -translate-x-1/2 top-6 w-48 opacity-10" viewBox="0 0 200 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="g" x1="0" x2="1">
-                <stop offset="0" stopColor="#ffffff" stopOpacity="0.6" />
-                <stop offset="1" stopColor="#ffffff" stopOpacity="0" />
-              </linearGradient>
-            </defs>
-            <rect width="200" height="30" fill="url(#g)"/>
-          </svg>
+        <div className="absolute top-4 right-4 sm:top-6 sm:right-10">
+          <div className="w-12 sm:w-20 h-12 sm:h-20 bg-orange-200/90 rounded-full blur-md floaty delay-500 rotate-slow" />
         </div>
       </section>
-
-      {/* Hero banners removed per request - kept hero intro only */}
 
       {/* Features Section */}
       <section className="py-12 bg-white">
