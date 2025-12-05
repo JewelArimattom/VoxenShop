@@ -80,35 +80,7 @@ These are intentionally simple for a demo. See the sections below for how to mov
 
 ---
 
-## Environment variables
 
-This project does not require runtime environment variables for the demo. If you add API keys or services, add them to Vercel or a `.env.local` file (do not commit secrets):
-
-```
-NEXT_PUBLIC_API_URL=...
-API_SECRET=...
-```
-
-Use `NEXT_PUBLIC_` prefix for values that must be available in browser code.
-
----
-
-## Deploying to Vercel (recommended)
-
-1. Push your repo to GitHub/GitLab/Bitbucket.
-2. Sign in to https://vercel.com and click **New Project  Import Git Repository**.
-3. Vercel will detect `Next.js` automatically. Use `npm run build` as the build command if asked.
-4. Add any environment variables under Project Settings (if you introduce any).
-5. Deploy — Vercel will create preview deployments for branches and production deployments for `main`.
-
-Or deploy from your machine using the Vercel CLI:
-
-```powershell
-npm i -g vercel
-vercel login
-cd C:\My\Voxen\ecommerce-app
-vercel --prod
-```
 
 Notes:
 - If your app fetches external images, ensure `next.config.js` `images.remotePatterns` includes the domains.
@@ -138,17 +110,7 @@ Suggested backend options: Supabase, Firebase, PlanetScale (MySQL), or a small E
 
 ---
 
-## Contributing
 
-This repo is a demo scaffold. If you want features or improvements, open a PR or ask me to implement them — e.g., server-backed auth, Luhn card validation, or improved responsiveness.
-
----
-
-## License
-
-This project is provided as a demo — add your preferred license if you plan to redistribute.
-
----
 
 If you'd like, I can:
 - Add serverless API endpoints (orders/auth) that persist to a simple JSON file (demo),
